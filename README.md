@@ -1,15 +1,20 @@
 # 🧠 NexusLLM
 
+![Build Status](https://img.shields.io/github/actions/workflow/status/nexicore-digitals/nexus-llm/main.yml)
+![Version](https://img.shields.io/github/package-json/v/nexicore-digitals/nexus-llm)
 ![Nexicore License](https://img.shields.io/badge/Nexicore-License%20Protected-red.svg)
-![Build Status](https://img.shields.io/github/actions/workflow/status/your-username/nexus-llm/main.yml)
-![Version](https://img.shields.io/github/package-json/v/your-username/nexus-llm)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 ![Open Source Love](https://img.shields.io/badge/Open%20Source-%F0%9F%92%96-blue.svg)
 ![Made with TypeScript](https://img.shields.io/badge/Made%20with-TypeScript-blue.svg)
 ![Modular](https://img.shields.io/badge/Modular-Plugin%20Ready-purple.svg)
 ![LLM Router](https://img.shields.io/badge/LLM-Router%20Core-orange.svg)
 ![Gemini Prefect](https://img.shields.io/badge/Gemini-2.5%20Flash%20Prefect-lightgrey.svg)
-![License: MIT](https://img.shields.io/badge/License-NEXICORE-yellow.svg)
+![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)
+![ESLint](https://img.shields.io/badge/lint-eslint-blue)
+![Vitest](https://img.shields.io/badge/tested_with-vitest-6E9FDC.svg)
+![Husky](https://img.shields.io/badge/precommit-hooks%20via&mdash;%20husky-8E44AD.svg)
+![Lint Staged](https://img.shields.io/badge/lint-staged%20files-3498DB.svg)
 
 **Modular LLM execution shell with plugin support.**  
 Routes free and open LLMs like Gemini, Mixtral, Phi-2/3, StarCoder2, Yi, and more—abstracting LiteLLM into a plugin-ready cognitive cortex for Nexi.
@@ -42,10 +47,22 @@ See [docs/MCP.md](./docs/MCP.md) for routing logic and [docs/SCHEMAS.md](./docs/
 
 ---
 
+## 🧪 Development Setup
+
+```bash
+npm install
+npm run format       # Format code with Prettier
+npm run lint         # Lint code with ESLint
+npm run test         # Run tests with Vitest
+npm run test:watch   # Watch mode for live feedback
+```
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/your-username/nexus-llm
+git clone https://github.com/nexicore-digitals/nexus-llm
 cd nexus-llm
 npm install
 ```
@@ -133,7 +150,26 @@ To unlock advanced flows (plugin chaining, schema-aware routing, memory hydratio
   - Create an account and upgrade to premium
   - Be listed in [CONTRIBUTORLIST.md](./CONTRIBUTORLIST.md) with `secretBadge: true`
 
-See [LICENSE.nexicore](./LICENSE.nexicore) for orchestration boundaries.
+See [LICENSE.nexicore.md](./LICENSE.nexicore.md) for orchestration boundaries.
+
+---
+
+## 🧼 Pre-commit Formatting
+
+NexusLLM uses [Husky](https://typicode.github.io/husky/#/) and [lint-staged](https://github.com/okonet/lint-staged) to enforce formatting and linting before every commit.
+
+```bash
+npx husky init
+echo "npx lint-staged" > .husky/pre-commit
+```
+
+### Pre-commit Tasks
+
+- ✅ Format staged `.ts` files with Prettier
+- ✅ Lint staged `.ts` files with ESLint
+- ✅ Prevent commits that violate style or cognitive clarity
+
+See `.lintstagedrc` and `.husky/pre-commit` for config.
 
 ---
 
