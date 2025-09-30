@@ -1,0 +1,47 @@
+name: "NexusLLM CI"
+
+on:
+    push:
+        branches-ignore:
+            - main
+            - master
+            - develop
+
+jobs:
+    run-checks:
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Typescript Checks
+              uses: owen-6936/ts-checks@v1.0.0
+
+            - name: Check for existing PR
+              id: pr-check
+              uses: owen-6936/detect-pr@v1.0.0
+              with:
+                  branch: ${{ github.ref_name }}
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Extract commit message
+              id: commit
+              uses: owen-6936/extract-commit-message@v1.0.0
+
+            - name: Create Pull Request
+              if: steps.pr-check.outputs.skip_pr_creation == 'false' && steps.commit.outputs.has_commit == 'true'
+              id: create-pr
+              uses: owen-6936/create-pr@v1.1.0
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{github.ref_name}}
+                  base-branch: main
+                  title: ${{ steps.commit.outputs.head_message }}
+                  body: ${{ steps.commit.outputs.body_message }}
+
+            - name: Log Commit Metadata
+              if: always()
+              run: |
+                  echo "Commit: ${{ steps.commit.outputs.head_message }}"
+                  echo "Body: ${{ steps.commit.outputs.body_message }}"
+                  echo "PR Skipped: ${{ steps.pr-check.outputs.skip_pr_creation }}"
