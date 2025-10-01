@@ -1,11 +1,29 @@
 # 🧠 NexusLLM
 
+**Modular LLM execution shell with plugin support.**  
+Routes free and open LLMs like Gemini, Mixtral, Phi-2/3, StarCoder2, Yi, and more—abstracting LiteLLM into a plugin-ready cognitive cortex for Nexi.
+
+---
+
+## 🧪 CI & Security
+
+![CI Status](https://img.shields.io/github/actions/workflow/status/nexicore-digitals/nexus-llm/ci.yml)
+![CodeQL Status](https://img.shields.io/github/actions/workflow/status/nexicore-digitals/nexus-llm/codeql.yml)
+![Last Commit](https://img.shields.io/github/last-commit/nexicore-digitals/nexus-llm)
+![Open Issues](https://img.shields.io/github/issues/nexicore-digitals/nexus-llm)
+![Contributors](https://img.shields.io/github/contributors/nexicore-digitals/nexus-llm)
+
+## 📦 Package & Licensing
+
 ![Build Status](https://img.shields.io/github/actions/workflow/status/nexicore-digitals/nexus-llm/main.yml)
 ![Version](https://img.shields.io/github/package-json/v/nexicore-digitals/nexus-llm)
 ![Nexicore License](https://img.shields.io/badge/Nexicore-License%20Protected-red.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 ![Open Source Love](https://img.shields.io/badge/Open%20Source-%F0%9F%92%96-blue.svg)
+
+## 🧠 Tech Stack & Philosophy
+
 ![Made with TypeScript](https://img.shields.io/badge/Made%20with-TypeScript-blue.svg)
 ![Modular](https://img.shields.io/badge/Modular-Plugin%20Ready-purple.svg)
 ![LLM Router](https://img.shields.io/badge/LLM-Router%20Core-orange.svg)
@@ -16,8 +34,13 @@
 ![Husky](https://img.shields.io/badge/precommit-hooks%20via&mdash;%20husky-8E44AD.svg)
 ![Lint Staged](https://img.shields.io/badge/lint-staged%20files-3498DB.svg)
 
-**Modular LLM execution shell with plugin support.**  
-Routes free and open LLMs like Gemini, Mixtral, Phi-2/3, StarCoder2, Yi, and more—abstracting LiteLLM into a plugin-ready cognitive cortex for Nexi.
+## 🧹 Code Hygiene
+
+![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)
+![ESLint](https://img.shields.io/badge/lint-eslint-blue)
+![Vitest](https://img.shields.io/badge/tested_with-vitest-6E9FDC.svg)
+![Husky](https://img.shields.io/badge/precommit-hooks%20via&mdash;%20husky-8E44AD.svg)
+![Lint Staged](https://img.shields.io/badge/lint-staged%20files-3498DB.svg)
 
 ---
 
