@@ -1,0 +1,50 @@
+# 🧠 Core Node Artifacts
+node_modules/
+dist/
+build/
+.cache/
+.temp/
+
+# 🧪 Vitest Coverage
+coverage/
+*.lcov
+
+# 🧼 Logs and Debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 🔐 Environment
+.env
+.env.local
+.env.*.local
+
+# 🧷 Husky
+.husky/_/
+
+# 🧩 Editor + OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# 📦 Package Manager
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 🧠 Cognitive Artifacts (optional)
+logs/
+commits.json
+memory.json
+
+# 🧪 Test Snapshots
+__snapshots__/
+*.spec.ts.snap
+
+# 🧠 Optional AI-generated files
+*.ai.json
+*.nexus.cache
