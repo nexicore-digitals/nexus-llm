@@ -1,0 +1,88 @@
+import { ModelName, ModelRole } from '../types/models';
+
+export const ROLE_PRIORITY_MATRIX: Record<ModelName, Partial<Record<ModelRole, number>>> = {
+  'Gemini Flash 2.5': {
+    prefect: 1,
+    router: 2,
+    summarizer: 4,
+    coder: 5,
+    generalist: 3,
+  },
+  'Gemma 2': {
+    prefect: 12,
+    router: 5,
+    summarizer: 1,
+    coder: 6,
+    generalist: 2,
+  },
+  'Command R': {
+    prefect: 11,
+    router: 1,
+    summarizer: 2,
+    coder: 7,
+    generalist: 4,
+  },
+  StarCoder2: {
+    prefect: 10,
+    router: 6,
+    summarizer: 8,
+    coder: 1,
+    generalist: 5,
+  },
+  'StableLM 2': {
+    prefect: 9,
+    router: 7,
+    summarizer: 9,
+    coder: 2,
+    generalist: 6,
+  },
+  Yi: {
+    prefect: 8,
+    router: 8,
+    summarizer: 10,
+    coder: 3,
+    generalist: 7,
+  },
+  'DeepSeek V3': {
+    prefect: 7,
+    router: 3,
+    summarizer: 3,
+    coder: 4,
+    generalist: 1,
+  },
+  'Qwen2.5': {
+    prefect: 6,
+    router: 4,
+    summarizer: 5,
+    coder: 8,
+    generalist: 8,
+  },
+  'Llama 3': {
+    prefect: 5,
+    router: 9,
+    summarizer: 7,
+    coder: 9,
+    generalist: 9,
+  },
+  Mistral: {
+    prefect: 4,
+    router: 10,
+    summarizer: 11,
+    coder: 10,
+    generalist: 10,
+  },
+  'Falcon 3': {
+    prefect: 3,
+    router: 11,
+    summarizer: 6,
+    coder: 11,
+    generalist: 11,
+  },
+  'Phi-4': {
+    prefect: 2,
+    router: 12,
+    summarizer: 12,
+    coder: 12,
+    generalist: 12,
+  },
+};
