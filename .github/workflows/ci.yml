@@ -25,7 +25,7 @@ jobs:
 
       - name: Extract commit message
         id: commit
-        uses: owen-6936/extract-commit-message@v1.0.0
+        uses: owen-6936/extract-commit-message@v1.0.1
 
       - name: Create Pull Request
         if: steps.pr-check.outputs.skip_pr_creation == 'false' && steps.commit.outputs.has_commit == 'true'
