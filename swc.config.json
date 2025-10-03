@@ -1,0 +1,21 @@
+{
+  "jsc": {
+    "target": "es2020",
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false
+    },
+    "transform": {
+      "optimizer": {
+        "globals": {
+          "typeof": true
+        }
+      }
+    }
+  },
+  "module": {
+    "type": "commonjs"
+  },
+  "sourceMaps": true,
+  "outDir": "dist"
+}
