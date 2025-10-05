@@ -89,5 +89,10 @@
     "tsx": "^4.20.6",
     "typescript-eslint": "^8.45.0",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@google/genai": "^1.22.0",
+    "dotenv": "^17.2.3",
+    "groq-sdk": "^0.33.0"
   }
 }

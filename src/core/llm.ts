@@ -1,4 +1,8 @@
+import { NexusRouter } from './NexusRouter';
+
+const router = new NexusRouter();
+
 export async function callLLM({ prompt }: { prompt: string }): Promise<string> {
-  // Replace with LiteLLM, OpenRouter, or mock
-  return `Echo: ${prompt}`;
+  const response = await router.route(prompt);
+  return response.output;
 }
