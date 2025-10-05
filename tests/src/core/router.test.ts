@@ -25,7 +25,7 @@ describe('NexusRouter', () => {
 
     expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Say hello');
     expect(result).toEqual({
-      output: 'Hello, world',
+      output: 'Hello, world!',
       model: 'Llama-3.3',
     });
   });
