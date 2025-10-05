@@ -20,10 +20,10 @@ describe('NexusRouter', () => {
     });
 
     const result = await router.route('Say hello', {
-      useCase: 'General text generation',
+      useCase: 'Code generation',
     });
 
-    expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Say hello');
+    expect(mockInvoke).toHaveBeenCalledWith('Code generation', 'Say hello');
     expect(result).toEqual({
       output: 'Hello, world!',
       model: 'Mistral',
@@ -47,10 +47,10 @@ describe('NexusRouter', () => {
     mockInvoke.mockRejectedValue(new Error('Model failure'));
 
     const result = await router.route('Trigger error', {
-      useCase: 'Advanced reasoning',
+      useCase: 'General text generation',
     });
 
     expect(result.output).toContain('An error occurred');
-    expect(result.model).toBe('Llama-3.3'); // fallback model
+    expect(result.model).toBe('Phi-4'); // fallback model
   });
 });
