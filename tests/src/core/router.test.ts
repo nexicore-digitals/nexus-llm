@@ -15,7 +15,7 @@ describe('NexusRouter', () => {
 
   it('routes input using provided useCase', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Llama-3.3',
+      model: 'Mistral',
       response: 'Hello, world!',
     });
 
@@ -26,20 +26,20 @@ describe('NexusRouter', () => {
     expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Say hello');
     expect(result).toEqual({
       output: 'Hello, world!',
-      model: 'Llama-3.3',
+      model: 'Mistral',
     });
   });
 
   it('falls back to default useCase when none is provided', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Llama-3.3',
+      model: 'Phi-4',
       response: 'Default response',
     });
 
     const result = await router.route('Default test');
 
     expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Default test');
-    expect(result.model).toBe('Llama-3.3');
+    expect(result.model).toBe('Phi-4');
     expect(result.output).toBe('Default response');
   });
 
@@ -47,7 +47,7 @@ describe('NexusRouter', () => {
     mockInvoke.mockRejectedValue(new Error('Model failure'));
 
     const result = await router.route('Trigger error', {
-      useCase: 'General text generation',
+      useCase: 'Advanced reasoning',
     });
 
     expect(result.output).toContain('An error occurred');
