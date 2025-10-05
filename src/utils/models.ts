@@ -1,5 +1,6 @@
 import { ROLE_PRIORITY_MATRIX } from '../constants/model-roles';
-import { MODEL_NAME, ModelName, ModelPossibleIndex, ModelRole } from '../types/models';
+import { getModelForUseCase } from '../constants/model-usecase';
+import { MODEL_NAME, ModelName, ModelPossibleIndex, ModelRole, UseCase } from '../types/models';
 
 const temp: { name: ModelName; role: ModelRole; rank: number }[] = [];
 
@@ -9,8 +10,6 @@ const intermediate: Record<ModelRole, { name: ModelName; rank: number }[]> = {
   summarizer: [],
   coder: [],
   generalist: [],
-  multilingual: [],
-  vision: [],
 };
 
 export const MODEL_REGISTRY_BY_ROLE_PRIORITY: Record<ModelRole, ModelName[]> = {
@@ -19,8 +18,6 @@ export const MODEL_REGISTRY_BY_ROLE_PRIORITY: Record<ModelRole, ModelName[]> = {
   summarizer: [],
   coder: [],
   generalist: [],
-  multilingual: [],
-  vision: [],
 };
 
 Object.keys(MODEL_NAME).forEach(key => {
@@ -47,4 +44,17 @@ export function getModelForRole(
 ): ModelName | undefined {
   const models = MODEL_REGISTRY_BY_ROLE_PRIORITY[role];
   return models?.[index];
+}
+
+export function resolveModelByRoleAndUseCase(
+  role: ModelRole,
+  useCase: UseCase,
+  index?: 1 | 2
+): ModelName {
+  const roleModels = MODEL_REGISTRY_BY_ROLE_PRIORITY[role];
+  const useCaseModels = getModelForUseCase(useCase).map(m => m.name);
+
+  const intersected = roleModels.filter(name => useCaseModels.includes(name));
+  if (index && intersected.length >= index) return intersected[index];
+  return intersected[0] ?? roleModels[0]; // fallback to top-priority role model
 }
