@@ -4,8 +4,8 @@ export const ROLE_PRIORITY_MATRIX: Record<ModelName, Partial<Record<ModelRole, n
   'Gemini Flash 2.5': {
     prefect: 1,
     router: 2,
-    summarizer: 6,
-    coder: 5,
+    summarizer: 5,
+    coder: 6,
     generalist: 4,
   },
   'Gemma-3-27B-IT': {
@@ -16,38 +16,40 @@ export const ROLE_PRIORITY_MATRIX: Record<ModelName, Partial<Record<ModelRole, n
     generalist: 3,
   },
   'Phi-4': {
+    // 15B
     prefect: 6,
     router: 7,
     summarizer: 4,
     coder: 2,
     generalist: 1,
   },
-  Mistral: {
-    prefect: 5,
-    router: 3,
+  'DeepSeek V3': {
+    // 7B
+    prefect: 3,
+    router: 6,
     summarizer: 3,
-    coder: 1,
+    coder: 3,
     generalist: 2,
   },
-  'DeepSeek V3': {
+  'DeepSeek R1': {
     prefect: 4,
-    router: 1,
-    summarizer: 5,
-    coder: 3,
+    router: 3,
+    summarizer: 2,
+    coder: 4,
+    generalist: 5,
+  },
+  StarCoder2: {
+    prefect: 5,
+    router: 4,
+    summarizer: 6,
+    coder: 1,
     generalist: 6,
   },
   'Llama-3.3': {
-    prefect: 3,
-    router: 4,
-    summarizer: 2,
-    coder: 6,
-    generalist: 5,
-  },
-  'Command R+': {
     prefect: 2,
-    router: 6,
+    router: 1,
     summarizer: 7,
-    coder: 7,
+    coder: 5,
     generalist: 7,
   },
 };

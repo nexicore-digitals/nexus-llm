@@ -83,6 +83,90 @@ console.log(result)
 
 ---
 
+## 📚 Documentation
+
+See the [docs](./docs) folder for:
+
+- [EXAMPLES.md](./docs/EXAMPLES.md): Real-world usage examples
+- [MCP.md](./docs/MCP.md): Model–Context–Policy orchestration
+- [SCHEMAS.md](./docs/SCHEMAS.md): Schema-aware routing and validation
+- [STYLEGUIDE.md](./docs/STYLEGUIDE.md): Writing modular, reviewer-friendly artifacts
+- [ROADMAP.md](./docs/ROADMAP.md): Upcoming features and milestones
+
+---
+
+## 📂 Code Structure
+
+NexusLLM follows a modular code structure to promote maintainability and extensibility. Key directories include:
+
+- `src/`: Core implementation of NexusLLM
+- `docs/`: Documentation and usage examples
+- `tests/`: Unit and integration tests
+
+---
+
+## 📂 Folder Structure
+
+```text
+nexus-llm/
+├── .github/                 # GitHub workflows and issue templates
+├── .husky/                  # Pre-commit hooks
+├── docs/
+│   ├── EXAMPLES.md
+│   ├── MCP.md
+│   ├── SCHEMAS.md
+│   ├── STYLEGUIDE.md
+│   └── ROADMAP.md/                # Example scripts and usage
+├── src/
+│   ├── constants/               # Constant values and configurations
+│   ├── core/                    # Core functionalities and abstractions
+│   ├── libs/
+│       ├── providers/           # LLM provider wrappers (Gemini, Mixtral, Phi-3, etc.)
+│   ├── plugins/                 # Plugin implementations
+│   ├── types/                   # Type definitions and interfaces
+│   ├── utils/                   # Utility functions
+│   └── index.ts
+├── tests/                  # Unit and integration tests
+├── .GITIGNORE
+├── .prettierignore         # Prettier ignore files
+├── .prettierrc             # Prettier configuration
+├── .CONTRIBUTING.md        # Contribution guidelines
+├── .eslint.config.js       # ESLint configuration
+├── .LICENSE                # MIT License
+├── .LICENSE.nexicore.md    # Nexicore License
+├── .LLMS.md                # Supported LLMs and licenses
+├── package-lock.json       # Lockfile for npm dependencies
+├── package.json            # Project metadata and dependencies
+├── PLUGINS.md              # Plugin documentation
+├── README.md               # Project overview and documentation
+├── swc.config.json         # SWC configuration
+├── tsconfig.json           # TypeScript configuration
+└── vitest.config.ts        # Vitest configuration
+```
+
+---
+
+## 🧩 Cognitive Functions
+
+NexusLLM employs a range of cognitive functions to enhance its performance:
+
+- **Context Awareness**: Adapts responses based on user context and history.
+- **Schema Validation**: Ensures inputs and outputs adhere to defined schemas.
+- **Multi-Model Routing**: Selects the best LLM for a given task based on its capabilities.
+- **Plugin Integration**: Leverages plugins to extend functionality and improve accuracy.
+
+---
+
+## 🧩 Model–Context–Policy (MCP)
+
+MCP is the orchestration layer that governs how models, context, and policies interact within NexusLLM. It ensures that:
+
+- The right model is selected based on the context and user intent.
+- Contextual information is preserved and utilized across interactions.
+- Policies are enforced to maintain consistency and quality in responses.
+
+---
+
 ## 🔌 Plugin System
 
 Plugins are modular cognitive extensions. Each plugin can:

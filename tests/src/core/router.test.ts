@@ -15,7 +15,7 @@ describe('NexusRouter', () => {
 
   it('routes input using provided useCase', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Mistral',
+      model: 'StarCoder2',
       response: 'Hello, world!',
     });
 
@@ -26,7 +26,7 @@ describe('NexusRouter', () => {
     expect(mockInvoke).toHaveBeenCalledWith('Code generation', 'Say hello');
     expect(result).toEqual({
       output: 'Hello, world!',
-      model: 'Mistral',
+      model: 'StarCoder2',
     });
   });
 

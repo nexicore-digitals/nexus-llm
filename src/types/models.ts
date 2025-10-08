@@ -1,20 +1,20 @@
-import { invokeCommandRPlus } from '../lib/providers/command-r-plus';
-import { invokeDeepSeek } from '../lib/providers/deepseek';
+import { invokeDeepSeekV3 } from '../lib/providers/deepseek';
+import { invokeDeepSeekR1 } from '../lib/providers/deepseek-r1';
 import { invokeGemini } from '../lib/providers/gemini';
 import { invokeGemma } from '../lib/providers/gemma';
 import { invokeLlama } from '../lib/providers/llama-3';
-import { invokeMistral } from '../lib/providers/Mistral';
 import { invokePhi } from '../lib/providers/phi-4';
+import { invokeStarCoder2 } from '../lib/providers/starcoder2';
 import { ModelInvocationHandler } from './providers';
 
 export const MODEL_NAME = {
   LLAMA_3: 'Llama-3.3',
   GEMINI_FLASH_2_5: 'Gemini Flash 2.5',
   GEMMA_3_27B_IT: 'Gemma-3-27B-IT',
-  COMMAND_R_PLUS: 'Command R+',
   PHI_4: 'Phi-4',
-  MISTRAL: 'Mistral',
   DEEPSEEK: 'DeepSeek V3',
+  DEEPSEEK_R1: 'DeepSeek R1',
+  STARCODER_2: 'StarCoder2',
 } as const;
 
 type ModelsCount = 6;
@@ -37,6 +37,11 @@ export const USE_CASES = [
   // 🧠 Reasoning & Math
   'Math reasoning',
   'Advanced reasoning',
+  'Reasoning',
+
+  // 📝 Instruction following
+  'Instruction following',
+  'General instruction following',
 
   // 💻 Code & Programming
   'Code generation',
@@ -79,16 +84,19 @@ export type ModelRole = keyof typeof MODEL_ROLES;
 export const USECASE_ROLE_MAP: Record<UseCase, ModelRole> = {
   'General text generation': 'generalist',
   'Long-form content generation': 'generalist',
-  'Conversational AI': 'router',
+  'Conversational AI': 'generalist',
   'Question answering': 'summarizer',
-  'Math reasoning': 'coder',
-  'Advanced reasoning': 'summarizer',
+  'Math reasoning': 'generalist',
+  'Advanced reasoning': 'generalist',
+  Reasoning: 'generalist', // NEW
+  'Instruction following': 'generalist',
+  'General instruction following': 'generalist',
   'Code generation': 'coder',
   'Code understanding': 'coder',
-  'Multilingual tasks': 'summarizer',
-  'Tool use': 'router',
-  'Function calling': 'router',
-  RAG: 'router',
+  'Multilingual tasks': 'generalist',
+  'Tool use': 'prefect',
+  'Function calling': 'prefect',
+  RAG: 'prefect',
   Summarization: 'summarizer',
   'Fine-tuning for specific domains': 'prefect',
   'Image understanding': 'generalist',
@@ -112,8 +120,8 @@ export const MODEL_CALLABLE_MAP: Record<ModelName, ModelInvocationHandler> = {
   'Gemini Flash 2.5': invokeGemini,
   'Gemma-3-27B-IT': invokeGemma,
   'Phi-4': invokePhi,
-  Mistral: invokeMistral,
-  'DeepSeek V3': invokeDeepSeek,
-  'Command R+': invokeCommandRPlus,
+  'DeepSeek V3': invokeDeepSeekV3,
+  'DeepSeek R1': invokeDeepSeekR1,
   'Llama-3.3': invokeLlama,
+  StarCoder2: invokeStarCoder2,
 };
