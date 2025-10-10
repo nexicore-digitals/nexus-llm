@@ -70,7 +70,8 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "typecheck": "tsc --noEmit",
     "build": "swc src -d dist",
-    "prepare": "npm run typecheck && npm run build"
+    "prebuild": "npm run typecheck && npm run build",
+    "prepare": "node .husky/install.mjs"
   },
   "devDependencies": {
     "@swc/cli": "^0.7.8",

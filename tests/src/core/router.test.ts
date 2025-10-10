@@ -15,31 +15,31 @@ describe('NexusRouter', () => {
 
   it('routes input using provided useCase', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Mistral',
+      model: 'StarCoder2',
       response: 'Hello, world!',
     });
 
     const result = await router.route('Say hello', {
-      useCase: 'General text generation',
+      useCase: 'Code generation',
     });
 
-    expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Say hello');
+    expect(mockInvoke).toHaveBeenCalledWith('Code generation', 'Say hello');
     expect(result).toEqual({
       output: 'Hello, world!',
-      model: 'Mistral',
+      model: 'StarCoder2',
     });
   });
 
   it('falls back to default useCase when none is provided', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Phi-4',
+      model: 'Gemma-3-27B-IT',
       response: 'Default response',
     });
 
     const result = await router.route('Default test');
 
     expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Default test');
-    expect(result.model).toBe('Phi-4');
+    expect(result.model).toBe('Gemma-3-27B-IT');
     expect(result.output).toBe('Default response');
   });
 
@@ -47,10 +47,10 @@ describe('NexusRouter', () => {
     mockInvoke.mockRejectedValue(new Error('Model failure'));
 
     const result = await router.route('Trigger error', {
-      useCase: 'Advanced reasoning',
+      useCase: 'General text generation',
     });
 
     expect(result.output).toContain('An error occurred');
-    expect(result.model).toBe('Llama-3.3'); // fallback model
+    expect(result.model).toBe('Gemma-3-27B-IT'); // fallback model
   });
 });

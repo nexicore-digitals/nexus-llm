@@ -10,162 +10,99 @@ Each model entry follows this structure:
 
 ```ts
 {
-  name: "phi3",
+  name: "phi4",
   family: "Phi",
   developer: "Microsoft",
-  params: ["3.8B", "7B", "14B", "42B (MoE)"],
-  contextWindow: ["4k", "8k", "128k"],
-  useCases: ["text", "code", "math", "multilingual", "on-device"],
+  params: ["15B"],
+  contextWindow: ["16k", "128k"],
+  useCases: ["text", "code", "math", "multilingual", "on-device", "RAG"],
   license: "Microsoft Research License",
   pluginCompatibility: ["RegexPlugin", "MemoryPlugin", "ToolRouterPlugin"],
-  notes: "Fast, compact, ideal for validation and reasoning tasks"
+  notes: "Fast, compact, ideal for validation and reasoning tasks",
+  requiresToken: false, // if true, requires API key or local setup
+  role: "generalist" // or "coder", "prefect", "summarizer", etc.
 }
-```
+````
 
 ---
 
 ## 🧠 Registered Models
 
-### 🟦 Phi-3 / Phi-4
+### 🟦 Phi-4
 
-- **Family**: Phi
-- **Developer**: Microsoft
-- **Params**: 3.8B, 7B, 14B, 42B (MoE)
-- **Context Window**: 4k, 8k, 128k, 16k (Phi-4)
-- **Use-Cases**: General text, multilingual, code understanding, math reasoning, on-device inference
-- **License**: Microsoft Research License
-- **Plugin Compatibility**: ✅ Regex, ✅ Memory, ✅ ToolRouter
-- **Notes**: Compact, fast, ideal for validation and schema-aware flows
+* **Family**: Phi
+* **Developer**: Microsoft
+* **Params**: 15B
+* **Context Window**: 16k, 128k
+* **Use-Cases**: General text, multilingual, code understanding, math reasoning, on-device inference, RAG
+* **License**: Microsoft Research License
+* **Plugin Compatibility**: ✅ Regex, ✅ Memory, ✅ ToolRouter
+* **Notes**: Updated to 15B; ideal for reasoning-heavy local tasks and schema-aware validation
 
 ---
 
 ### 🟨 Gemini 2.5 Flash
 
-- **Family**: Gemini
-- **Developer**: Google
-- **Params**: 2B, 9B, 27B
-- **Context Window**: 8k
-- **Use-Cases**: Summarization, QA, general text, code generation
-- **License**: Gemma License
-- **Plugin Compatibility**: ✅ DocPlugin, ✅ ExplainerPlugin
-- **Notes**: Fastest responder, ideal as class prefect for MCP orchestration
-
----
-
-### 🟧 Mixtral / Mistral
-
-- **Family**: Mistral
-- **Developer**: Mistral AI
-- **Params**: 3B–124B
-- **Context Window**: 32k–128k
-- **Use-Cases**: High-complexity tasks, multilingual, code, image, function calling
-- **License**: Apache 2.0 / Commercial
-- **Plugin Compatibility**: ✅ Regex, ✅ ToolRouter, ✅ Memory
-- **Notes**: Ideal for deep reasoning, fallback, and ensemble validation
-
----
-
-### 🟥 Falcon 3
-
-- **Family**: Falcon
-- **Developer**: TII
-- **Params**: 1B, 3B, 7B, 10B
-- **Context Window**: 8k–32k
-- **Use-Cases**: General text, code, math, scientific knowledge
-- **License**: TII Falcon License
-- **Plugin Compatibility**: ✅ DocPlugin, ✅ RegexPlugin
-- **Notes**: Strong in scientific and multilingual flows
-
----
-
-### 🟩 Gemma 2
-
-- **Family**: Gemma
-- **Developer**: Google
-- **Params**: 2B, 9B, 27B
-- **Context Window**: 8k
-- **Use-Cases**: Text generation, QA, summarization, code
-- **License**: Gemma License
-- **Plugin Compatibility**: ✅ DocPlugin
-- **Notes**: Lightweight, schema-friendly, ideal for onboarding flows
+* **Family**: Gemini
+* **Developer**: Google
+* **Params**: 2B, 9B, 27B
+* **Context Window**: 128k
+* **Use-Cases**: Summarization, QA, general text, code generation, RAG
+* **License**: Gemini License
+* **Plugin Compatibility**: ✅ DocPlugin, ✅ ExplainerPlugin
+* **Notes**: Fastest responder; acts as MCP “prefect” for routing orchestration
 
 ---
 
 ### 🟪 StarCoder2
 
-- **Family**: BigCode
-- **Developer**: BigCode
-- **Params**: 3B, 7B, 15B
-- **Context Window**: 16k
-- **Use-Cases**: Code completion, multi-language programming
-- **License**: Apache 2.0
-- **Plugin Compatibility**: ✅ RegexPlugin, ✅ ExplainerPlugin
-- **Notes**: Ideal for contributor coding flows and reviewable suggestions
+* **Family**: BigCode
+* **Developer**: BigCode
+* **Params**: 15B
+* **Context Window**: 16k
+* **Use-Cases**: Code generation, multi-language programming, instruction following
+* **License**: Apache 2.0
+* **Plugin Compatibility**: ✅ RegexPlugin, ✅ ExplainerPlugin
+* **Notes**: Ideal for local coding flows, contributor review, and high-context completion tasks
 
 ---
 
-### 🟫 Yi
+### 🟩 DeepSeek R1
 
-- **Family**: Yi
-- **Developer**: 01.AI
-- **Params**: 6B, 9B, 34B
-- **Context Window**: 4k, 8k, 200k
-- **Use-Cases**: Bilingual generation, code, math, reasoning
-- **License**: Apache 2.0
-- **Plugin Compatibility**: ✅ RegexPlugin, ✅ ToolRouterPlugin
-- **Notes**: High-context, multilingual, ideal for edge cognition
-
----
-
-### 🟦 Qwen2.5
-
-- **Family**: Qwen
-- **Developer**: Alibaba
-- **Params**: 0.5B–72B
-- **Context Window**: 128k
-- **Use-Cases**: Text, multilingual, code, math, structured data
-- **License**: Apache 2.0 / Qwen License
-- **Plugin Compatibility**: ✅ ToolRouterPlugin, ✅ MemoryPlugin
-- **Notes**: Ideal for structured data flows and schema hydration
+* **Family**: DeepSeek
+* **Developer**: DeepSeek AI
+* **Params**: 8B
+* **Context Window**: 32k
+* **Use-Cases**: Code generation, code understanding, general instruction following, reasoning
+* **License**: DeepSeek License
+* **Plugin Compatibility**: ✅ RegexPlugin, ✅ ToolRouterPlugin
+* **Notes**: Efficient 4-bit quantized model for local deployment, instruction-following capable
 
 ---
 
-### 🟧 DeepSeek V2/V3
+### 🟫 DeepSeek V3
 
-- **Family**: DeepSeek
-- **Developer**: DeepSeek AI
-- **Params**: 16B, 236B, 671B (V3)
-- **Context Window**: 32k–128k
-- **Use-Cases**: Text, multilingual, code, advanced reasoning
-- **License**: DeepSeek License
-- **Plugin Compatibility**: ✅ RegexPlugin, ✅ ToolRouterPlugin
-- **Notes**: High-capacity, ideal for ensemble fallback and schema-heavy flows
-
----
-
-### 🟨 StableLM 2
-
-- **Family**: StableLM
-- **Developer**: Stability AI
-- **Params**: 1.6B, 3B, 12B
-- **Context Window**: Up to 16k
-- **Use-Cases**: Multilingual text, code, fine-tuning
-- **License**: Stability AI Community / Enterprise
-- **Plugin Compatibility**: ✅ RegexPlugin, ✅ DocPlugin
-- **Notes**: Lightweight, ideal for contributor onboarding and schema validation
+* **Family**: DeepSeek
+* **Developer**: DeepSeek AI
+* **Params**: 7B
+* **Context Window**: 32k
+* **Use-Cases**: Text, code, multilingual, advanced reasoning, RAG
+* **License**: DeepSeek License
+* **Plugin Compatibility**: ✅ RegexPlugin, ✅ ToolRouterPlugin
+* **Notes**: Lightweight ensemble fallback model; efficient for local inference
 
 ---
 
-### 🟫 Command R
+### 🟧 Gemma 3-27B-IT
 
-- **Family**: Command R
-- **Developer**: Cohere
-- **Params**: 7B, 35B, 104B
-- **Context Window**: 128k
-- **Use-Cases**: Conversational AI, RAG, tool use, long-form generation
-- **License**: CC-BY-NC 4.0
-- **Plugin Compatibility**: ✅ ToolRouterPlugin, ✅ MemoryPlugin
-- **Notes**: Ideal for tool-aware flows and long-form contributor feedback
+* **Family**: Gemma
+* **Developer**: Google
+* **Params**: 27B
+* **Context Window**: 32k
+* **Use-Cases**: Summarization, QA, general text, multilingual, long-form content, advanced reasoning
+* **License**: Gemma License
+* **Plugin Compatibility**: ✅ DocPlugin
+* **Notes**: Ideal for high-context summarization and multilingual tasks
 
 ---
 
@@ -173,21 +110,32 @@ Each model entry follows this structure:
 
 Nexi uses this registry to assign models based on:
 
-- **Model**: Capability and context window
-- **Context**: Schema complexity, contributor state
-- **Policy**: License constraints, plugin compatibility
-- **Fallback**: Availability, cost, performance
+* **Model**: Capability and context window
+* **Context**: Schema complexity, contributor state
+* **Policy**: License constraints, plugin compatibility
+* **Fallback**: Availability, cost, performance
 
 ---
 
 ## 📎 Future Extensions
 
-- Add `costEstimate` and `latencyProfile` fields
-- Add `schemaAffinity` tags for NexusDSM compatibility
-- Add `toolCallingSupport` flag for plugin routing
-- Add `streamingSupport` flag for emotional architecture
+* Add `costEstimate` and `latencyProfile` fields
+* Add `schemaAffinity` tags for NexusDSM compatibility
+* Add `toolCallingSupport` flag for plugin routing
+* Add `streamingSupport` flag for emotional architecture
 
 ---
 
-This registry is alive. Every model is a neuron. Every plugin is a tool. Every contributor is a signal.  
+This registry is alive. Every model is a neuron. Every plugin is a tool. Every contributor is a signal.
 Nexi reads this file like a cognitive map—and routes accordingly.
+
+---
+
+This version:
+
+* Removes **Command R+** and **Mistral-7B**  
+* Updates **Phi-4** to 15B  
+* Adds **StarCoder2-15B** and both **DeepSeek local models**  
+* Aligns **context windows**, **use-cases**, and **plugin compatibility**  
+* Includes notes for quantization and local inference suitability  
+* Formats consistently for easy parsing and future automation

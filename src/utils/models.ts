@@ -1,6 +1,8 @@
 import { ROLE_PRIORITY_MATRIX } from '../constants/model-roles';
 import { getModelForUseCase } from '../constants/model-usecase';
-import { MODEL_NAME, ModelName, ModelPossibleIndex, ModelRole, UseCase } from '../types/models';
+import { ModelRole } from '../types/models/model-roles';
+import { UseCase } from '../types/models/model-usecase';
+import { MODEL_NAME, ModelName, ModelPossibleIndex } from '../types/models/models';
 
 const temp: { name: ModelName; role: ModelRole; rank: number }[] = [];
 
@@ -10,6 +12,11 @@ const intermediate: Record<ModelRole, { name: ModelName; rank: number }[]> = {
   summarizer: [],
   coder: [],
   generalist: [],
+  listener: [],
+  speaker: [],
+  visualist: [],
+  generator: [],
+  captioner: [],
 };
 
 export const MODEL_REGISTRY_BY_ROLE_PRIORITY: Record<ModelRole, ModelName[]> = {
@@ -18,6 +25,11 @@ export const MODEL_REGISTRY_BY_ROLE_PRIORITY: Record<ModelRole, ModelName[]> = {
   summarizer: [],
   coder: [],
   generalist: [],
+  captioner: [],
+  listener: [],
+  speaker: [],
+  visualist: [],
+  generator: [],
 };
 
 Object.keys(MODEL_NAME).forEach(key => {

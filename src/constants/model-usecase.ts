@@ -1,4 +1,4 @@
-import { ModelMetadata, UseCase } from '../types/models';
+import { ModelMetadata, UseCase } from '../types/models/models';
 import { MODEL_REGISTRY } from './models';
 
 export const MODEL_REGISTRY_BY_USE_CASE: Record<string, ModelMetadata[]> = {};

@@ -1,6 +1,10 @@
-import { getModelForUseCase } from '../../constants/model-usecase';
-import { MODEL_CALLABLE_MAP, ModelName, UseCase, USECASE_ROLE_MAP } from '../../types/models';
-import { getModelForRole, resolveModelByRoleAndUseCase } from '../../utils/models';
+import {
+  MODEL_CALLABLE_MAP,
+  ModelName,
+  UseCase,
+  USECASE_ROLE_MAP,
+} from '../../types/models/models';
+import { resolveModelByRoleAndUseCase } from '../../utils/models';
 
 export async function invokeNexusLLM(
   useCase: UseCase = 'General text generation',

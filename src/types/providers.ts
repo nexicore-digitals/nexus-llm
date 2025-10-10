@@ -1,4 +1,4 @@
-import { ModelName, UseCase } from './models';
+import { ModelName, UseCase } from './models/models';
 
 export interface ModelInvocationPayload {
   task?: UseCase;
