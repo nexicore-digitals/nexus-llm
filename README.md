@@ -109,39 +109,46 @@ NexusLLM follows a modular code structure to promote maintainability and extensi
 
 ```text
 nexus-llm/
-├── .github/                 # GitHub workflows and issue templates
+├── .github/                 # GitHub workflows
 ├── .husky/                  # Pre-commit hooks
-├── docs/
+├── docs/                    # Documentation
+│   ├── CONTRIBUTORS.md
 │   ├── EXAMPLES.md
 │   ├── MCP.md
+│   ├── ROADMAP.md
 │   ├── SCHEMAS.md
-│   ├── STYLEGUIDE.md
-│   └── ROADMAP.md/                # Example scripts and usage
+│   └── STYLEGUIDE.md
 ├── src/
-│   ├── constants/               # Constant values and configurations
-│   ├── core/                    # Core functionalities and abstractions
-│   ├── libs/
-│       ├── providers/           # LLM provider wrappers (Gemini, Mixtral, Phi-3, etc.)
-│   ├── plugins/                 # Plugin implementations
-│   ├── types/                   # Type definitions and interfaces
-│   ├── utils/                   # Utility functions
-│   └── index.ts
-├── tests/                  # Unit and integration tests
-├── .GITIGNORE
-├── .prettierignore         # Prettier ignore files
-├── .prettierrc             # Prettier configuration
-├── .CONTRIBUTING.md        # Contribution guidelines
-├── .eslint.config.js       # ESLint configuration
-├── .LICENSE                # MIT License
-├── .LICENSE.nexicore.md    # Nexicore License
-├── .LLMS.md                # Supported LLMs and licenses
-├── package-lock.json       # Lockfile for npm dependencies
-├── package.json            # Project metadata and dependencies
-├── PLUGINS.md              # Plugin documentation
-├── README.md               # Project overview and documentation
-├── swc.config.json         # SWC configuration
-├── tsconfig.json           # TypeScript configuration
-└── vitest.config.ts        # Vitest configuration
+│   ├── constants/             # Model configurations, roles, and registries
+│   │   ├── model-configs/
+│   │   └── models/
+│   ├── core/                  # Core router and LLM functionalities
+│   ├── lib/                   # Library files, including providers
+│   │   └── providers/         # LLM provider wrappers, organized by category
+│   │       ├── audio/
+│   │       ├── imagegen/
+│   │       ├── llms/
+│   │       └── vision/
+│   ├── plugins/               # Plugin implementations
+│   ├── types/                 # Type definitions and interfaces
+│   │   └── models/
+│   └── utils/                 # Utility functions
+├── tests/                   # Unit and integration tests
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── CONTRIBUTING.md
+├── eslint.config.js
+├── LICENSE
+├── LICENSE.nexicore.md
+├── LLMs.md
+├── package-lock.json
+├── package.json
+├── PLUGINS.md
+├── README.md
+├── swc.config.json
+├── tsconfig.json
+└── vitest.config.ts
 ```
 
 ---
