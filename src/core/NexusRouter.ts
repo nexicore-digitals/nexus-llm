@@ -15,7 +15,11 @@ export class NexusRouter implements LLMRouter {
   async route(input: string, context?: RouterContext): Promise<LLMResponse> {
     const useCase: UseCase = (context?.useCase as UseCase) ?? 'General text generation';
     const role = USECASE_ROLE_MAP[useCase as UseCase];
-    let modelUsed = resolveModelByRoleAndUseCase(role, useCase);
+    // --- Contributor-aware Model Selection ---
+    // Use contributor's preferred model if available, otherwise resolve by role.
+    let modelUsed =
+      context?.contributor?.preferredModel ?? resolveModelByRoleAndUseCase(role, useCase);
+
     let processedInput = input;
     const pluginsUsed: string[] = [];
 

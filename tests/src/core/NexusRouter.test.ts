@@ -3,6 +3,7 @@ import { NexusRouter } from '../../../src/core/NexusRouter';
 import { invokeNexusLLM } from '../../../src/lib/providers/nexusllm';
 import { Plugin, PluginManager } from '../../../src/core/PluginManager';
 import { RouterContext } from '../../../src/types/router';
+import { Contributor } from '../../../src/types/contributor';
 import { PluginName } from '../../../src/types/plugins';
 
 // Mock dependencies
@@ -116,5 +117,30 @@ describe('NexusRouter', () => {
 
     // // Verify the result object is correct
     // expect(result.pluginsUsed).toEqual(['plugin1', 'plugin2']);
+  });
+
+  it("should use the contributor's preferred model if provided", async () => {
+    // 1. Setup a contributor with a preferred model
+    const contributor: Contributor = {
+      id: 'test-user',
+      preferredModel: 'Gemma-3-27B-IT',
+    };
+
+    const context: RouterContext = {
+      useCase: 'Code generation', // This would normally resolve to 'StarCoder2'
+      contributor: contributor,
+    };
+
+    // 2. Mock an error to inspect the 'modelUsed' in the catch block
+    const mockError = new Error('LLM invocation failed');
+    vi.mocked(invokeNexusLLM).mockRejectedValue(mockError);
+
+    // 3. Call the router
+    const result = await router.route('hello world', context);
+
+    // 4. Assert that the router's response uses the contributor's preferred model
+    // The default for 'Code generation' is 'StarCoder2', but it should be overridden.
+    expect(result.model).toBe('Gemma-3-27B-IT');
+    expect(result.error).toBe('LLM invocation failed');
   });
 });
