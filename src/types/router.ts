@@ -1,4 +1,6 @@
-import { ModelName, ModelRole, UseCase } from './models/models';
+import { ModelRole } from './models/model-roles';
+import { UseCase } from './models/model-usecase';
+import { ModelName } from './models/models';
 
 export interface LLMRouter {
   route(input: string, context?: RouterContext): Promise<LLMResponse>;
@@ -17,4 +19,5 @@ export interface LLMResponse {
   model: ModelName;
   tokensUsed?: number;
   pluginUsed?: string;
+  error?: string;
 }

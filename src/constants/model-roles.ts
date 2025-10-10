@@ -17,12 +17,12 @@ export const ROLE_PRIORITY_MATRIX: Record<ModelName, Partial<Record<ModelRole, n
   'SDXL Turbo INT8 ONNX': { generator: 1, visualist: 4 },
 
   // --- Audio & Speech ---
-  'Whisper Tiny': { listener: 6 },
-  'Whisper Base': { listener: 5 },
-  'Whisper Small': { listener: 4 },
   'Whisper Large-V3': { listener: 1 },
-  Vosk: { listener: 7 },
-  'Coqui STT': { listener: 3 },
+  'Coqui STT': { listener: 2 },
+  'Whisper Small': { listener: 3 },
+  'Whisper Base': { listener: 4 },
+  Vosk: { listener: 5 },
+  'Whisper Tiny': { listener: 6 },
   'XTTS v2': { speaker: 1 },
   Bark: { speaker: 2 },
   StyleTTS2: { speaker: 3 },

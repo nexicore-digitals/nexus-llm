@@ -1,6 +1,13 @@
-export type PluginName = 'memory' | 'logger' | 'validator';
+export type PluginName =
+  | 'memory'
+  | 'logger'
+  | 'validator'
+  | 'doc'
+  | 'explainer'
+  | 'regex'
+  | 'tool-router';
 
 export interface Plugin {
   name: PluginName;
-  run: (input: string) => Promise<string>;
+  run: (input: string) => Promise<{ readonly modifiedInput: string }>;
 }

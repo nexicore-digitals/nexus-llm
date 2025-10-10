@@ -1,13 +1,6 @@
-import { GoogleGenAI } from '@google/genai';
-import { ModelInvocationHandler } from '../../../types/providers';
-import { MODEL_NAME } from '../../../types/models/models';
-const ai = new GoogleGenAI({});
+import { createLlmProvider } from '../../../constants/llm-provider-factory';
 
-export const invokeGemini: ModelInvocationHandler = async (input: string) => {
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: input,
-  });
+// import { GoogleGenAI } from '@google/genai';
+// const ai = new GoogleGenAI({});
 
-  return { model: MODEL_NAME['GEMINI_FLASH_2_5'], response: response.text ?? '' };
-};
+export const invokeGemini = createLlmProvider('Gemini Flash 2.5');

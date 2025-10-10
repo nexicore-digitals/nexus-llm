@@ -1,13 +1,6 @@
-import { GoogleGenAI } from '@google/genai';
-import { ModelInvocationHandler } from '../../../types/providers';
-import { MODEL_NAME } from '../../../types/models/models';
-const ai = new GoogleGenAI({});
+import { createLlmProvider } from '../../../constants/llm-provider-factory';
 
-export const invokeGemma: ModelInvocationHandler = async (input: string) => {
-  const response = await ai.models.generateContent({
-    model: 'gemma-3-27b-it',
-    contents: input,
-  });
+// import { GoogleGenAI } from '@google/genai';
+// const ai = new GoogleGenAI({});
 
-  return { model: MODEL_NAME['GEMINI_FLASH_2_5'], response: response.text ?? '' };
-};
+export const invokeGemma = createLlmProvider('Gemma-3-27B-IT');
