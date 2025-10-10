@@ -39,16 +39,22 @@ describe('NexusRouter', () => {
     expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'hello world');
   });
 
-  it('should execute a single plugin if specified in the context', async () => {
+  it('should execute a single plugin for a contributor with premium access', async () => {
     const mockPlugin: Plugin = {
       name: 'regex',
       run: vi.fn().mockResolvedValue({ modifiedInput: 'MODIFIED: hello world' }),
     };
     vi.spyOn(mockPluginManager, 'get').mockReturnValue(mockPlugin);
 
+    const premiumContributor: Contributor = {
+      id: 'premium-user',
+      secretBadge: true,
+    };
+
     const context: RouterContext = {
       useCase: 'Code generation',
       plugins: ['regex'],
+      contributor: premiumContributor,
     };
 
     const result = await router.route('hello world', context);
@@ -66,6 +72,10 @@ describe('NexusRouter', () => {
     const context: RouterContext = {
       useCase: 'Code generation',
       plugins: ['non-existent-plugin'],
+      contributor: {
+        id: 'premium-user-not-found',
+        secretBadge: true,
+      },
     };
 
     const result = await router.route('hello world', context);
@@ -78,18 +88,18 @@ describe('NexusRouter', () => {
   it('should execute a chain of plugins in order', async () => {
     // 1. Setup mock plugins
     const plugin1: Plugin = {
-      name: 'memory' as PluginName, // Cast to PluginName
+      name: 'memory' as PluginName,
       run: vi.fn().mockResolvedValue({ modifiedInput: 'output from plugin1' }),
     };
     const plugin2: Plugin = {
-      name: 'doc' as PluginName, // Cast to PluginName
+      name: 'doc' as PluginName,
       run: vi.fn().mockResolvedValue({ modifiedInput: 'output from plugin2' }),
     };
 
     // 2. Setup PluginManager mock to return the correct plugin for each call
     const getSpy = vi.spyOn(mockPluginManager, 'get');
     getSpy.mockImplementation(pluginName => {
-      if (pluginName === 'plugin1') return plugin1;
+      if (pluginName === 'memory') return plugin1;
       if (pluginName === 'doc') return plugin2;
       return undefined; // Return undefined for unknown plugin names
     });
@@ -97,8 +107,28 @@ describe('NexusRouter', () => {
     // 3. Define context to trigger the plugin chain
     const context: RouterContext = {
       useCase: 'Code generation',
-      plugins: ['plugin1', 'plugin2'],
+      plugins: ['memory', 'doc'],
+      contributor: {
+        id: 'premium-user-chain',
+        secretBadge: true,
+      },
     };
+
+    // 4. Call the router
+    const result = await router.route('initial input', context);
+
+    // 5. Assertions
+    expect(getSpy).toHaveBeenCalledWith('memory');
+    expect(getSpy).toHaveBeenCalledWith('doc');
+
+    // Verify plugins were called in order with the correct input
+    expect(plugin1.run).toHaveBeenCalledWith('initial input', context);
+    expect(plugin2.run).toHaveBeenCalledWith('output from plugin1', context);
+
+    // Verify the final output from the chain was sent to the LLM
+    expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'output from plugin2');
+
+    expect(result.pluginsUsed).toEqual(['memory', 'doc']);
   });
 
   it("should use the contributor's preferred model if provided", async () => {
@@ -131,6 +161,7 @@ describe('NexusRouter', () => {
     const contributor: Contributor = {
       id: 'beginner-user',
       skillLevel: 'beginner',
+      secretBadge: true, // Plugins are a premium feature
     };
 
     const context: RouterContext = {
@@ -183,6 +214,10 @@ describe('NexusRouter', () => {
     const context: RouterContext = {
       useCase: 'General text generation',
       plugins: ['post-processor'],
+      contributor: {
+        id: 'premium-user-postrun',
+        secretBadge: true,
+      },
     };
 
     // 2. Call the router
@@ -217,5 +252,48 @@ describe('NexusRouter', () => {
     // The formatter plugin should be registered but not listed in pluginsUsed
     // as it's an internal, final-step plugin.
     expect(result.pluginsUsed).not.toContain('formatter');
+  });
+
+  describe('Premium Access Logic', () => {
+    it('should NOT execute plugins if the contributor does not have premium access', async () => {
+      // 1. Setup a mock plugin and a non-premium contributor
+      const mockPlugin: Plugin = {
+        name: 'regex',
+        run: vi.fn(),
+      };
+      vi.spyOn(mockPluginManager, 'get').mockReturnValue(mockPlugin);
+
+      const context: RouterContext = {
+        useCase: 'Code generation',
+        plugins: ['regex'],
+        contributor: { id: 'non-premium-user', secretBadge: false },
+      };
+
+      // 2. Call the router
+      const result = await router.route('hello world', context);
+
+      // 3. Assertions
+      expect(mockPlugin.run).not.toHaveBeenCalled();
+      expect(result.pluginsUsed).toEqual([]);
+      expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'hello world');
+    });
+
+    it('should execute plugins if the contributor has the secretBadge', async () => {
+      const mockPlugin: Plugin = {
+        name: 'regex',
+        run: vi.fn().mockResolvedValue({ modifiedInput: 'some input' }),
+      };
+      vi.spyOn(mockPluginManager, 'get').mockReturnValue(mockPlugin);
+
+      const context: RouterContext = {
+        useCase: 'Code generation',
+        plugins: ['regex'],
+        contributor: { id: 'premium-user', secretBadge: true },
+      };
+
+      await router.route('hello world', context);
+
+      expect(mockPlugin.run).toHaveBeenCalled();
+    });
   });
 });

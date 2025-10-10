@@ -4,6 +4,7 @@ import { LLMRouter, LLMResponse } from '../types/router';
 import { RouterContext } from '../types/router';
 import { resolveModelByRoleAndUseCase } from '../utils/models';
 import { PluginManager } from './PluginManager';
+import { hasPremiumAccess } from '../utils/access';
 import { FormatterPlugin } from '../plugins/FormatterPlugin';
 
 export class NexusRouter implements LLMRouter {
@@ -39,19 +40,22 @@ export class NexusRouter implements LLMRouter {
       }
     }
 
-    // --- Plugin Execution Step ---
-    if (context?.plugins && Array.isArray(context.plugins)) {
-      for (const pluginName of context.plugins) {
-        const plugin = this.pluginManager.get(pluginName);
-        if (plugin) {
-          if (plugin.run) {
-            console.log(`[NexusRouter] Executing pre-run for plugin: "${plugin.name}"`);
-            const { modifiedInput } = await plugin.run(processedInput, context);
-            processedInput = modifiedInput;
+    // --- Premium Access Gate for Plugins ---
+    if (hasPremiumAccess(context)) {
+      // --- Plugin Execution Step ---
+      if (context?.plugins && Array.isArray(context.plugins)) {
+        for (const pluginName of context.plugins) {
+          const plugin = this.pluginManager.get(pluginName);
+          if (plugin) {
+            if (plugin.run) {
+              console.log(`[NexusRouter] Executing pre-run for plugin: "${plugin.name}"`);
+              const { modifiedInput } = await plugin.run(processedInput, context);
+              processedInput = modifiedInput;
+            }
+            pluginsUsed.push(plugin.name); // Add to used list even if only postRun exists
+          } else {
+            console.warn(`[NexusRouter] Plugin "${pluginName}" not found. Skipping.`);
           }
-          pluginsUsed.push(plugin.name); // Add to used list even if only postRun exists
-        } else {
-          console.warn(`[NexusRouter] Plugin "${pluginName}" not found. Skipping.`);
         }
       }
     }
@@ -88,11 +92,13 @@ export class NexusRouter implements LLMRouter {
     finalResponse = await FormatterPlugin.postRun!(finalResponse, context);
 
     // --- Post-processing Plugin Execution (runs for both success and error) ---
-    for (const pluginName of pluginsUsed) {
-      const plugin = this.pluginManager.get(pluginName);
-      if (plugin?.postRun) {
-        console.log(`[NexusRouter] Executing post-run for plugin: "${plugin.name}"`);
-        finalResponse = await plugin.postRun(finalResponse, context);
+    if (hasPremiumAccess(context)) {
+      for (const pluginName of pluginsUsed) {
+        const plugin = this.pluginManager.get(pluginName);
+        if (plugin?.postRun) {
+          console.log(`[NexusRouter] Executing post-run for plugin: "${plugin.name}"`);
+          finalResponse = await plugin.postRun(finalResponse, context);
+        }
       }
     }
     return finalResponse;
