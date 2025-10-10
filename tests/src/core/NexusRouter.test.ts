@@ -33,7 +33,7 @@ describe('NexusRouter', () => {
   it('should route to the correct model without a plugin', async () => {
     const result = await router.route('hello world', { useCase: 'Code generation' });
 
-    expect(result.output).toBe('some llm response');
+    expect(result.output).toHaveProperty('suggestion', 'some llm response');
     expect(result.model).toBe('StarCoder2');
     expect(result.pluginsUsed).toEqual([]);
     expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'hello world');
@@ -57,7 +57,7 @@ describe('NexusRouter', () => {
     expect(mockPlugin.run).toHaveBeenCalledWith('hello world', context);
     expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'MODIFIED: hello world');
     expect(result.pluginsUsed).toEqual(['regex']);
-    expect(result.output).toBe('some llm response');
+    expect(result.output).toHaveProperty('suggestion', 'some llm response');
   });
 
   it('should not execute a plugin if requested plugin is not found', async () => {
@@ -166,9 +166,15 @@ describe('NexusRouter', () => {
     const mockPostRunPlugin: Plugin = {
       name: 'post-processor' as PluginName,
       postRun: vi.fn().mockImplementation(async (response: LLMResponse) => {
+        // The output should already be structured by the FormatterPlugin
+        const suggestion = (response.output as any).suggestion;
         return {
           ...response,
-          output: `${response.output} - modified by postRun`,
+          // Preserve the structure, only modify the suggestion
+          output: {
+            ...(response.output as any),
+            suggestion: `${suggestion} - modified by postRun`,
+          },
         };
       }),
     };
@@ -188,12 +194,28 @@ describe('NexusRouter', () => {
 
     // Check that postRun was called with the initial LLM response
     expect(mockPostRunPlugin.postRun).toHaveBeenCalledWith(
-      expect.objectContaining({ output: 'some llm response' }),
+      expect.objectContaining({ output: { suggestion: 'some llm response' } }),
       context
     );
 
     // Check that the final output is the one modified by postRun
-    expect(result.output).toBe('some llm response - modified by postRun');
+    expect(result.output).toHaveProperty('suggestion', 'some llm response - modified by postRun');
     expect(result.pluginsUsed).toContain('post-processor');
+  });
+
+  it('should format the final output using the FormatterPlugin', async () => {
+    // 1. Call the router with a simple request
+    const result = await router.route('some input', { useCase: 'General text generation' });
+
+    // 2. Assertions
+    // The output should be an object, not a string
+    expect(result.output).toBeTypeOf('object');
+
+    // It should have the 'suggestion' property containing the original LLM response
+    expect(result.output).toHaveProperty('suggestion', 'some llm response');
+
+    // The formatter plugin should be registered but not listed in pluginsUsed
+    // as it's an internal, final-step plugin.
+    expect(result.pluginsUsed).not.toContain('formatter');
   });
 });

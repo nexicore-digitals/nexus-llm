@@ -16,8 +16,15 @@ export interface RouterContext {
   metadata?: Record<string, any>;
 }
 
+export interface ReviewerOutput {
+  suggestion: string; // The primary output or suggestion
+  explainer?: string;
+  confidence?: number;
+  reviewerNote?: string;
+}
+
 export interface LLMResponse {
-  output: string;
+  output: string | ReviewerOutput;
   model: ModelName;
   tokensUsed?: number;
   pluginsUsed?: string[];

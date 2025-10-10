@@ -4,12 +4,15 @@ import { LLMRouter, LLMResponse } from '../types/router';
 import { RouterContext } from '../types/router';
 import { resolveModelByRoleAndUseCase } from '../utils/models';
 import { PluginManager } from './PluginManager';
+import { FormatterPlugin } from '../plugins/FormatterPlugin';
 
 export class NexusRouter implements LLMRouter {
   private pluginManager: PluginManager;
 
   constructor(pluginManager: PluginManager) {
     this.pluginManager = pluginManager;
+    // Register the internal formatter plugin
+    this.pluginManager.register(FormatterPlugin);
   }
 
   async route(input: string, context?: RouterContext): Promise<LLMResponse> {
@@ -79,6 +82,10 @@ export class NexusRouter implements LLMRouter {
       // Add the error to the response object
       finalResponse.error = errorMessage;
     }
+
+    // --- Initial Formatting Step ---
+    // Ensure the output is structured before other post-run plugins operate on it.
+    finalResponse = await FormatterPlugin.postRun!(finalResponse, context);
 
     // --- Post-processing Plugin Execution (runs for both success and error) ---
     for (const pluginName of pluginsUsed) {
