@@ -1,8 +1,8 @@
-import { Plugin } from '../types/plugins';
+import { Plugin } from '../core/PluginManager';
 
 export const ToolRouterPlugin: Plugin = {
   name: 'tool-router',
   run: async (input: string) => {
-    return `ToolRouterPlugin received: ${input}`;
+    return { modifiedInput: `ToolRouterPlugin received: ${input}` };
   },
 };

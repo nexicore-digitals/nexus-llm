@@ -1,5 +1,5 @@
-import { Plugin, PluginName } from '../types/plugins';
 import { DocPlugin } from './DocPlugin';
+import { Plugin, PluginName } from '../types/plugins';
 import { ExplainerPlugin } from './ExplainerPlugin';
 import { MemoryPlugin } from './MemoryPlugin';
 import { RegexPlugin } from './RegexPlugin';

@@ -10,6 +10,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "tests/src/plugins/PluginManager.test.ts",
+    "tests/src/plugins/RegexPlugin.test.ts"
+  ],
   "exclude": ["node_modules", "dist", "tests"]
 }
