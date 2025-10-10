@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusRouter } from '../../../src/core/NexusRouter';
 import { invokeNexusLLM } from '../../../src/lib/providers/nexusllm';
 import { Plugin, PluginManager } from '../../../src/core/PluginManager';
-import { RouterContext } from '../../../src/types/router';
+import { LLMResponse, RouterContext } from '../../../src/types/router';
 import { Contributor } from '../../../src/types/contributor';
 import { PluginName } from '../../../src/types/plugins';
 
@@ -99,24 +99,6 @@ describe('NexusRouter', () => {
       useCase: 'Code generation',
       plugins: ['plugin1', 'plugin2'],
     };
-
-    // 4. Call the router
-    const result = await router.route('initial input', context);
-
-    // // 5. Assertions
-    // // Verify get was called for both
-    // expect(getSpy).toHaveBeenCalledWith('plugin1');
-    // expect(getSpy).toHaveBeenCalledWith('plugin2');
-
-    // // Verify plugins were called in order with the correct input
-    // expect(plugin1.run).toHaveBeenCalledWith('initial input', context);
-    // expect(plugin2.run).toHaveBeenCalledWith('output from plugin1', context);
-
-    // // Verify the final output from the chain was sent to the LLM
-    // expect(invokeNexusLLM).toHaveBeenCalledWith('Code generation', 'output from plugin2');
-
-    // // Verify the result object is correct
-    // expect(result.pluginsUsed).toEqual(['plugin1', 'plugin2']);
   });
 
   it("should use the contributor's preferred model if provided", async () => {
@@ -142,5 +124,76 @@ describe('NexusRouter', () => {
     // The default for 'Code generation' is 'StarCoder2', but it should be overridden.
     expect(result.model).toBe('Gemma-3-27B-IT');
     expect(result.error).toBe('LLM invocation failed');
+  });
+
+  it('should automatically add the ExplainerPlugin for beginner contributors', async () => {
+    // 1. Setup a beginner contributor
+    const contributor: Contributor = {
+      id: 'beginner-user',
+      skillLevel: 'beginner',
+    };
+
+    const context: RouterContext = {
+      useCase: 'General text generation',
+      contributor: contributor,
+      // No plugins initially specified
+    };
+
+    // 2. Setup mock for ExplainerPlugin
+    const explainerPlugin: Plugin = {
+      name: 'explainer',
+      run: vi.fn().mockResolvedValue({ modifiedInput: 'explained input' }),
+    };
+    vi.spyOn(mockPluginManager, 'get').mockImplementation(pluginName => {
+      if (pluginName === 'explainer') {
+        return explainerPlugin;
+      }
+      return undefined;
+    });
+
+    // 3. Call the router
+    const result = await router.route('some input', context);
+
+    // 4. Assertions
+    expect(mockPluginManager.get).toHaveBeenCalledWith('explainer');
+    expect(explainerPlugin.run).toHaveBeenCalledWith('some input', context);
+    expect(result.pluginsUsed).toContain('explainer');
+    expect(invokeNexusLLM).toHaveBeenCalledWith('General text generation', 'explained input');
+  });
+
+  it('should execute postRun method of a plugin after the LLM call', async () => {
+    // 1. Setup a plugin with a postRun method
+    const mockPostRunPlugin: Plugin = {
+      name: 'post-processor' as PluginName,
+      postRun: vi.fn().mockImplementation(async (response: LLMResponse) => {
+        return {
+          ...response,
+          output: `${response.output} - modified by postRun`,
+        };
+      }),
+    };
+    vi.spyOn(mockPluginManager, 'get').mockReturnValue(mockPostRunPlugin);
+
+    const context: RouterContext = {
+      useCase: 'General text generation',
+      plugins: ['post-processor'],
+    };
+
+    // 2. Call the router
+    const result = await router.route('some input', context);
+
+    // 3. Assertions
+    // Check that the LLM was called first
+    expect(invokeNexusLLM).toHaveBeenCalledWith('General text generation', 'some input');
+
+    // Check that postRun was called with the initial LLM response
+    expect(mockPostRunPlugin.postRun).toHaveBeenCalledWith(
+      expect.objectContaining({ output: 'some llm response' }),
+      context
+    );
+
+    // Check that the final output is the one modified by postRun
+    expect(result.output).toBe('some llm response - modified by postRun');
+    expect(result.pluginsUsed).toContain('post-processor');
   });
 });
