@@ -1,4 +1,4 @@
-import { Plugin } from '../types/plugins';
+import { Plugin } from '../core/PluginManager';
 
 export const DocPlugin: Plugin = {
   name: 'doc',

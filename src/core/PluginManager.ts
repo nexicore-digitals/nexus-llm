@@ -1,4 +1,13 @@
-import { Plugin, PluginName } from '../types/plugins';
+import { PluginName } from '../types/plugins';
+import { RouterContext } from '../types/router';
+
+export interface Plugin {
+  name: PluginName;
+  /**
+   * Executes the plugin's logic on the input string.
+   */
+  run(input: string, context?: RouterContext): Promise<{ readonly modifiedInput: string }>;
+}
 
 export class PluginManager {
   private plugins: Map<string, Plugin> = new Map();

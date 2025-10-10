@@ -6,8 +6,3 @@ export type PluginName =
   | 'explainer'
   | 'regex'
   | 'tool-router';
-
-export interface Plugin {
-  name: PluginName;
-  run: (input: string) => Promise<{ readonly modifiedInput: string }>;
-}

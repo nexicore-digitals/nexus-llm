@@ -10,7 +10,7 @@ export interface RouterContext {
   useCase?: UseCase;
   model?: ModelName;
   role?: ModelRole;
-  plugin?: string;
+  plugins?: string[];
   metadata?: Record<string, any>;
 }
 
@@ -18,6 +18,6 @@ export interface LLMResponse {
   output: string;
   model: ModelName;
   tokensUsed?: number;
-  pluginUsed?: string;
+  pluginsUsed?: string[];
   error?: string;
 }

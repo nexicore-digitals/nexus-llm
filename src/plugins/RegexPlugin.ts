@@ -1,4 +1,4 @@
-import { Plugin } from '../types/plugins';
+import { Plugin } from '../core/PluginManager';
 import { RouterContext } from '../types/router';
 
 export const RegexPlugin: Plugin = {

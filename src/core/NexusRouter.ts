@@ -17,16 +17,20 @@ export class NexusRouter implements LLMRouter {
     const role = USECASE_ROLE_MAP[useCase as UseCase];
     let modelUsed = resolveModelByRoleAndUseCase(role, useCase);
     let processedInput = input;
-    let pluginUsed: string | undefined;
+    const pluginsUsed: string[] = [];
 
     // --- Plugin Execution Step ---
-    if (context?.plugin) {
-      const plugin = this.pluginManager.get(context.plugin);
-      if (plugin) {
-        pluginUsed = plugin.name;
-        const { modifiedInput } = await plugin.run(input);
-        processedInput = modifiedInput;
-        console.log(`[NexusRouter] Plugin "${plugin.name}" processed the input.`);
+    if (context?.plugins && Array.isArray(context.plugins)) {
+      for (const pluginName of context.plugins) {
+        const plugin = this.pluginManager.get(pluginName);
+        if (plugin) {
+          console.log(`[NexusRouter] Executing plugin: "${plugin.name}"`);
+          const { modifiedInput } = await plugin.run(processedInput, context);
+          processedInput = modifiedInput;
+          pluginsUsed.push(plugin.name);
+        } else {
+          console.warn(`[NexusRouter] Plugin "${pluginName}" not found. Skipping.`);
+        }
       }
     }
 
@@ -37,7 +41,7 @@ export class NexusRouter implements LLMRouter {
       return {
         output: response,
         model,
-        pluginUsed,
+        pluginsUsed,
       };
     } catch (error: any) {
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -49,7 +53,7 @@ export class NexusRouter implements LLMRouter {
         output: 'An error occurred while processing your request.',
         model: modelUsed,
         error: errorMessage,
-        pluginUsed,
+        pluginsUsed,
       };
     }
   }
