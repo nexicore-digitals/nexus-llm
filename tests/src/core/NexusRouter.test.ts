@@ -5,6 +5,7 @@ import { Plugin, PluginManager } from '../../../src/core/PluginManager';
 import { LLMResponse, RouterContext } from '../../../src/types/router';
 import { Contributor } from '../../../src/types/contributor';
 import { PluginName } from '../../../src/types/plugins';
+import { MemoryPlugin } from '../../../src/plugins/MemoryPlugin';
 
 // Mock dependencies
 vi.mock('../../../src/core/PluginManager');
@@ -295,5 +296,46 @@ describe('NexusRouter', () => {
 
       expect(mockPlugin.run).toHaveBeenCalled();
     });
+  });
+
+  it('should use the MemoryPlugin to hydrate the prompt before calling the LLM', async () => {
+    // 1. Setup: Use the real MemoryPlugin logic in our mock
+    vi.spyOn(mockPluginManager, 'get').mockImplementation(pluginName => {
+      if (pluginName === 'memory') {
+        return MemoryPlugin;
+      }
+      return undefined;
+    });
+
+    // 2. Define a contributor with memory and premium access
+    const contributor: Contributor = {
+      id: 'user-with-memory',
+      secretBadge: true,
+      memory: {
+        lastUsedPlugin: 'regex',
+        lastSchema: 'NexusDSM.v1',
+      },
+    };
+
+    const context: RouterContext = {
+      useCase: 'General text generation',
+      plugins: ['memory'],
+      contributor,
+    };
+
+    // 3. Call the router
+    await router.route('fix this please', context);
+
+    // 4. Assert that the LLM was called with the hydrated prompt
+    expect(invokeNexusLLM).toHaveBeenCalledWith(
+      'General text generation',
+      expect.stringContaining(
+        "[Memory Context: Last used plugin was 'regex'. Last used schema was 'NexusDSM.v1'.]"
+      )
+    );
+    expect(invokeNexusLLM).toHaveBeenCalledWith(
+      'General text generation',
+      expect.stringContaining('Original prompt: fix this please')
+    );
   });
 });
