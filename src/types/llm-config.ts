@@ -15,6 +15,7 @@ export interface TokenizerInfo {
   bosTokenId: number;
   eosTokenId: number;
   unknownTokenId: number;
+  chatTemplate: string;
 }
 
 export interface LLMDetails {

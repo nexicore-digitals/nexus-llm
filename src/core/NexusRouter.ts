@@ -1,12 +1,13 @@
 import { invokeNexusLLM } from '../lib/providers/nexusllm';
-import { USECASE_ROLE_MAP } from '../types/models';
-import { LLMRouter, LLMResponse, RouterContext } from '../types/router';
+import { USECASE_ROLE_MAP, UseCase } from '../types/models/model-usecase';
+import { LLMRouter, LLMResponse } from '../types/router';
+import { RouterContext } from '../types/router';
 import { resolveModelByRoleAndUseCase } from '../utils/models';
 
 export class NexusRouter implements LLMRouter {
   async route(input: string, context?: RouterContext): Promise<LLMResponse> {
-    const useCase = context?.useCase ?? 'General text generation';
-    const role = USECASE_ROLE_MAP[useCase];
+    const useCase: UseCase = (context?.useCase as UseCase) ?? 'General text generation';
+    const role = USECASE_ROLE_MAP[useCase as UseCase];
     let modelUsed = resolveModelByRoleAndUseCase(role, useCase);
     try {
       const { model, response } = await invokeNexusLLM(useCase, input);

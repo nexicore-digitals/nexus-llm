@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
-import { MODEL_NAME } from '../../types/models';
-import { ModelInvocationHandler } from '../../types/providers';
+import { ModelInvocationHandler } from '../../../types/providers';
+import { MODEL_NAME } from '../../../types/models/models';
 const ai = new GoogleGenAI({});
 
 export const invokeGemma: ModelInvocationHandler = async (input: string) => {

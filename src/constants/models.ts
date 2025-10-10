@@ -1,124 +1,14 @@
-import { ModelMetadata } from '../types/models';
-
-export const GEMINI_FLASH_2_5: ModelMetadata = {
-  name: 'Gemini Flash 2.5',
-  family: 'Gemini',
-  developer: 'Google',
-  params: ['2.5'],
-  contextWindow: ['128k'],
-  useCases: [
-    'General text generation',
-    'Long-form content generation',
-    'Conversational AI',
-    'Question answering',
-    'Tool use',
-    'Function calling',
-    'RAG',
-    'Summarization',
-    'Efficient large-scale processing',
-  ],
-  license: 'Gemini License',
-  requiresToken: true,
-  role: 'prefect',
-};
+import { ModelMetadata } from '../types/models/models';
+import { AUDIO_MODEL_REGISTRY } from './models/audio';
+import { IMAGEGEN_MODEL_REGISTRY } from './models/imagegen';
+import { LLM_REGISTRY } from './models/llm';
+import { VISION_MODEL_REGISTRY } from './models/vision';
 
 export const MODEL_REGISTRY: ModelMetadata[] = [
-  {
-    name: 'Llama-3.3',
-    family: 'Llama',
-    developer: 'Meta',
-    params: ['70B'],
-    contextWindow: ['128k'],
-    useCases: [
-      'General text generation',
-      'Long-form content generation',
-      'Code generation',
-      'Code understanding',
-      'Math reasoning',
-      'Advanced reasoning',
-      'Fine-tuning for specific domains',
-    ],
-    license: 'Llama Community License',
-    requiresToken: false,
-    role: 'generalist',
-  },
-  GEMINI_FLASH_2_5,
-  {
-    name: 'Gemma-3-27B-IT',
-    family: 'Gemma',
-    developer: 'Google',
-    params: ['27B'],
-    contextWindow: ['32k'],
-    useCases: [
-      'Summarization',
-      'Question answering',
-      'General text generation',
-      'Multilingual tasks',
-      'Long-form content generation',
-      'Advanced reasoning',
-      'Fine-tuning for specific domains',
-    ],
-    license: 'Gemma License',
-    requiresToken: true,
-    role: 'summarizer',
-  },
-  {
-    name: 'Phi-4',
-    family: 'Phi',
-    developer: 'Microsoft',
-    params: ['15B'],
-    contextWindow: ['128k'],
-    useCases: [
-      'General text generation',
-      'Multilingual tasks',
-      'Code understanding',
-      'Math reasoning',
-      'Image understanding',
-      'On-device inference',
-    ],
-    license: 'Microsoft Research License',
-    requiresToken: false,
-    role: 'generalist',
-  },
-  {
-    name: 'StarCoder2',
-    family: 'StarCoder',
-    developer: 'BigCode',
-    params: ['15B'],
-    contextWindow: ['16k'],
-    useCases: ['Code generation', 'Code understanding', 'RAG', 'Instruction following'],
-    license: 'OpenRAIL-M',
-    requiresToken: false,
-    role: 'coder',
-  },
-  {
-    name: 'DeepSeek R1',
-    family: 'DeepSeek',
-    developer: 'DeepSeek AI',
-    params: ['8B'],
-    contextWindow: ['32k'],
-    useCases: ['General instruction following', 'RAG', 'Reasoning', 'Multilingual tasks'],
-    license: 'DeepSeek License',
-    requiresToken: false,
-    role: 'generalist',
-  },
-  {
-    name: 'DeepSeek V3',
-    family: 'DeepSeek',
-    developer: 'DeepSeek AI',
-    params: ['7B'],
-    contextWindow: ['32k'],
-    useCases: [
-      'Code generation',
-      'Code understanding',
-      'Multilingual tasks',
-      'Advanced reasoning',
-      'General text generation',
-    ],
-    license: 'DeepSeek License',
-    requiresToken: false,
-    role: 'coder',
-  },
+  ...AUDIO_MODEL_REGISTRY,
+  ...IMAGEGEN_MODEL_REGISTRY,
+  ...LLM_REGISTRY,
+  ...VISION_MODEL_REGISTRY,
 ];
 
 export const MODEL_REGISTRY_BY_NAME: Record<string, ModelMetadata> = Object.fromEntries(

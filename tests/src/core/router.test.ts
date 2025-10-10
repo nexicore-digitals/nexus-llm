@@ -32,14 +32,14 @@ describe('NexusRouter', () => {
 
   it('falls back to default useCase when none is provided', async () => {
     mockInvoke.mockResolvedValue({
-      model: 'Phi-4',
+      model: 'Gemma-3-27B-IT',
       response: 'Default response',
     });
 
     const result = await router.route('Default test');
 
     expect(mockInvoke).toHaveBeenCalledWith('General text generation', 'Default test');
-    expect(result.model).toBe('Phi-4');
+    expect(result.model).toBe('Gemma-3-27B-IT');
     expect(result.output).toBe('Default response');
   });
 
@@ -51,6 +51,6 @@ describe('NexusRouter', () => {
     });
 
     expect(result.output).toContain('An error occurred');
-    expect(result.model).toBe('Phi-4'); // fallback model
+    expect(result.model).toBe('Gemma-3-27B-IT'); // fallback model
   });
 });

@@ -1,4 +1,4 @@
-import { ModelName, ModelRole, UseCase } from './models';
+import { ModelName, ModelRole, UseCase } from './models/models';
 
 export interface LLMRouter {
   route(input: string, context?: RouterContext): Promise<LLMResponse>;
