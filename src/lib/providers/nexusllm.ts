@@ -1,9 +1,5 @@
-import {
-  MODEL_CALLABLE_MAP,
-  ModelName,
-  UseCase,
-  USECASE_ROLE_MAP,
-} from '../../types/models/models';
+import { UseCase, USECASE_ROLE_MAP } from '../../types/models/model-usecase';
+import { MODEL_CALLABLE_MAP, ModelName } from '../../types/models/models';
 import { resolveModelByRoleAndUseCase } from '../../utils/models';
 
 export async function invokeNexusLLM(
