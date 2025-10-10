@@ -48,3 +48,6 @@ __snapshots__/
 # 🧠 Optional AI-generated files
 *.ai.json
 *.nexus.cache
+
+# 📝 Commit Message File
+.commit_message

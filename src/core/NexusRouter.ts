@@ -18,11 +18,15 @@ export class NexusRouter implements LLMRouter {
         model,
       };
     } catch (error: any) {
-      const err: Error = error;
-      console.error(`[NexusRouter] Error routing input: ${err.message}\nModel used: ${modelUsed}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[NexusRouter] Error routing input for use case "${useCase}". Intended model: "${modelUsed}".`
+      );
+      console.error(error); // Log the full error object for stack trace
       return {
         output: 'An error occurred while processing your request.',
         model: modelUsed,
+        error: errorMessage,
       };
     }
   }
