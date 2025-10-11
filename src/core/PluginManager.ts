@@ -1,4 +1,17 @@
-import { Plugin, PluginName } from '../types/plugins';
+import { PluginName } from '../types/plugins';
+import { LLMResponse, RouterContext } from '../types/router';
+
+export interface Plugin {
+  name: PluginName;
+  /**
+   * Executes the plugin's logic on the input string before the LLM call.
+   */
+  run?(input: string, context?: RouterContext): Promise<{ readonly modifiedInput: string }>;
+  /**
+   * Executes the plugin's logic on the LLMResponse after the LLM call.
+   */
+  postRun?(response: LLMResponse, context?: RouterContext): Promise<LLMResponse>;
+}
 
 export class PluginManager {
   private plugins: Map<string, Plugin> = new Map();

@@ -3,12 +3,12 @@ import { ModelName } from '../types/models/models';
 
 export const ROLE_PRIORITY_MATRIX: Record<ModelName, Partial<Record<ModelRole, number>>> = {
   // --- Text & Conversational ---
-  'Gemini Flash 2.5': { prefect: 1, router: 2, summarizer: 5, coder: 6, generalist: 4 },
+  'Gemini Flash 2.5': { prefect: 1, router: 2, summarizer: 5, coder: 6, generalist: 2 },
   'Gemma-3-27B-IT': { prefect: 7, router: 5, summarizer: 1, coder: 4, generalist: 3 },
-  'Qwen2.5': { prefect: 6, router: 7, summarizer: 4, coder: 2, generalist: 1 },
-  'DeepSeek R1': { prefect: 4, router: 3, summarizer: 2, coder: 5, generalist: 5 },
-  StarCoder2: { prefect: 5, router: 4, summarizer: 6, coder: 1, generalist: 6 },
-  'Llama-3.3': { prefect: 2, router: 1, summarizer: 7, coder: 3, generalist: 7 },
+  'Qwen2.5': { prefect: 6, router: 7, summarizer: 4, coder: 2, generalist: 1 }, // Top Generalist
+  'DeepSeek R1': { prefect: 4, router: 3, summarizer: 2, coder: 5, generalist: 4 },
+  StarCoder2: { prefect: 5, router: 4, summarizer: 6, coder: 1, generalist: 5 },
+  'Llama-3.3': { prefect: 2, router: 1, summarizer: 7, coder: 3, generalist: 6 },
 
   // --- Vision & Multimodal ---
   'Qwen2.5-VL': { visualist: 1, generator: 3 },
