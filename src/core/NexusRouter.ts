@@ -5,6 +5,7 @@ import { RouterContext } from '../types/router';
 import { resolveModelByRoleAndUseCase } from '../utils/models';
 import { PluginManager } from './PluginManager';
 import { hasPremiumAccess } from '../utils/access';
+import { getModelForRole } from '../utils/models';
 import { FormatterPlugin } from '../plugins/FormatterPlugin';
 
 export class NexusRouter implements LLMRouter {
@@ -23,6 +24,7 @@ export class NexusRouter implements LLMRouter {
     // Use contributor's preferred model if available, otherwise resolve by role.
     let modelUsed =
       context?.contributor?.preferredModel ?? resolveModelByRoleAndUseCase(role, useCase);
+    console.log(`[NexusRouter] Selected model: "${modelUsed}" for use case "${useCase}"`);
 
     let processedInput = input;
     const pluginsUsed: string[] = [];
@@ -68,28 +70,46 @@ export class NexusRouter implements LLMRouter {
     };
 
     try {
-      const { model, response } = await invokeNexusLLM(useCase, processedInput);
+      const { model, response } = await invokeNexusLLM(useCase, processedInput, {
+        model: modelUsed,
+      });
       console.log(`[NexusRouter] Routing "${useCase}" to "${model}"`);
 
       // Update the response object on success
       finalResponse = {
         ...finalResponse,
-        output: response,
+        output: {
+          suggestion: response,
+          confidence: 0.95, // Default confidence for successful responses
+        },
         model, // Use the actual model returned by the provider
       };
-    } catch (error: any) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(
-        `[NexusRouter] Error routing input for use case "${useCase}". Intended model: "${modelUsed}".`
-      );
-      console.error(error); // Log the full error object for stack trace
-      // Add the error to the response object
-      finalResponse.error = errorMessage;
-    }
+    } catch (initialError: any) {
+      console.error(`[NexusRouter] Initial model invocation failed for "${modelUsed}".`);
 
-    // --- Initial Formatting Step ---
-    // Ensure the output is structured before other post-run plugins operate on it.
-    finalResponse = await FormatterPlugin.postRun!(finalResponse, context);
+      // --- Fallback Orchestration (Premium Feature) ---
+      if (hasPremiumAccess(context)) {
+        const fallbackModel = getModelForRole(role, 1); // Get the second-best model
+        if (fallbackModel) {
+          console.log(`[NexusRouter] Attempting fallback to model: "${fallbackModel}"`);
+          try {
+            const { model, response } = await invokeNexusLLM(useCase, processedInput, {
+              model: fallbackModel,
+            });
+            finalResponse.output = response;
+            finalResponse.model = model;
+            finalResponse.fallbackModel = modelUsed; // Record that a fallback occurred
+            initialError = null; // Clear the error as fallback was successful
+          } catch (fallbackError: any) {
+            console.error(`[NexusRouter] Fallback model "${fallbackModel}" also failed.`);
+          }
+        }
+      }
+
+      if (initialError) {
+        finalResponse.error = initialError.message;
+      }
+    }
 
     // --- Post-processing Plugin Execution (runs for both success and error) ---
     if (hasPremiumAccess(context)) {
@@ -101,6 +121,10 @@ export class NexusRouter implements LLMRouter {
         }
       }
     }
-    return finalResponse;
+
+    // --- Final Formatting Step ---
+    // This should be the last step to ensure all modifications are captured.
+    const fullyProcessedResponse = await FormatterPlugin.postRun!(finalResponse, context);
+    return fullyProcessedResponse;
   }
 }

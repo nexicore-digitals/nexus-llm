@@ -29,4 +29,5 @@ export interface LLMResponse {
   tokensUsed?: number;
   pluginsUsed?: string[];
   error?: string;
+  fallbackModel?: ModelName;
 }

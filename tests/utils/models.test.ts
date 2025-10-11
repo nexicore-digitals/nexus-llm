@@ -21,7 +21,7 @@ describe('getModelForRole', () => {
 
   it('returns fallback model at index', () => {
     expect(getModelForRole('prefect', 1)).toBe('Llama-3.3');
-    expect(getModelForRole('generalist', 1)).toBe('Gemma-3-27B-IT');
+    expect(getModelForRole('generalist', 1)).toBe('Gemini Flash 2.5');
     expect(getModelForRole('visualist', 1)).toBe('BLIP-2');
     expect(getModelForRole('generator', 1)).toBe('Qwen2.5-VL');
     expect(getModelForRole('listener', 1)).toBe('Coqui STT');
